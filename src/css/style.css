@@ -401,3 +401,358 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+/* --------------------------------------------------------------------------
+   17. PDF Pages
+   -------------------------------------------------------------------------- */
+.pdf-page {
+  margin: 12px 0;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  background: white;
+}
+
+.pdf-page canvas {
+  display: block;
+}
+
+/* First page gets extra top margin */
+.pdf-page:first-child {
+  margin-top: 20px;
+}
+
+/* Last page gets extra bottom margin */
+.pdf-page:last-child {
+  margin-bottom: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   18. Autocomplete Dropdown (Phase 2)
+   -------------------------------------------------------------------------- */
+.cm-tooltip-autocomplete {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-md) !important;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}
+
+.cm-tooltip-autocomplete > ul {
+  max-height: 280px;
+}
+
+.cm-tooltip-autocomplete > ul > li {
+  color: var(--text-primary) !important;
+  padding: 4px 8px !important;
+}
+
+.cm-tooltip-autocomplete > ul > li[aria-selected] {
+  background: var(--accent-primary) !important;
+  color: white !important;
+}
+
+.cm-completionDetail {
+  color: var(--text-secondary) !important;
+  font-style: italic;
+  margin-left: 8px;
+}
+
+.cm-completionInfo {
+  background: var(--bg-toolbar) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  padding: 6px 10px !important;
+  border-radius: var(--border-radius) !important;
+  font-size: var(--font-size-sm);
+}
+
+/* --------------------------------------------------------------------------
+   19. Bracket Matching (Phase 2)
+   -------------------------------------------------------------------------- */
+.cm-matchingBracket {
+  background-color: rgba(124, 111, 247, 0.3) !important;
+  border-bottom: 1px solid var(--accent-primary);
+}
+
+.cm-nonmatchingBracket {
+  background-color: rgba(248, 113, 113, 0.3) !important;
+}
+
+/* --------------------------------------------------------------------------
+   20. Go-to-Line Dialog (Phase 2)
+   -------------------------------------------------------------------------- */
+.goto-line-dialog {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-toolbar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 8px 14px;
+  box-shadow: var(--shadow-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.goto-line-dialog input {
+  width: 80px;
+  padding: 4px 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  outline: none;
+}
+
+.goto-line-dialog input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-primary-glow);
+}
+
+.btn-sm {
+  padding: 3px 10px;
+  font-size: var(--font-size-sm);
+}
+
+/* --------------------------------------------------------------------------
+   21. Fold Gutter (Phase 2)
+   -------------------------------------------------------------------------- */
+.cm-foldPlaceholder {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-placeholder);
+  padding: 0 6px;
+  margin: 0 4px;
+}
+
+/* --------------------------------------------------------------------------
+   22. Toolbar Button Variants (Phase 3)
+   -------------------------------------------------------------------------- */
+.btn-toolbar {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--transition-fast);
+}
+
+.btn-toolbar:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.btn-active {
+  background: var(--accent-primary) !important;
+  color: white !important;
+  border-color: var(--accent-primary) !important;
+}
+
+.btn-active .btn-icon {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.btn-ghost:hover {
+  color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   23. Log Panel (Phase 3)
+   -------------------------------------------------------------------------- */
+.panel-editor {
+  display: flex;
+  flex-direction: column;
+}
+
+#editor-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.log-panel {
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  max-height: 200px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+}
+
+.log-title {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.log-entries {
+  padding: 0;
+}
+
+.log-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 4px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background var(--transition-fast);
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-clickable {
+  cursor: pointer;
+}
+
+.log-clickable:hover {
+  background: var(--bg-tertiary);
+}
+
+.log-icon {
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.log-line {
+  flex-shrink: 0;
+  width: 40px;
+  color: var(--text-placeholder);
+}
+
+.log-message {
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+/* Entry type colors */
+.log-error .log-icon { color: var(--accent-error, #f87171); }
+.log-error .log-message { color: var(--accent-error, #f87171); }
+.log-warning .log-icon { color: var(--accent-warning, #fbbf24); }
+.log-warning .log-message { color: var(--accent-warning, #fbbf24); }
+.log-badbox .log-icon { color: var(--text-placeholder); }
+.log-badbox .log-message { color: var(--text-secondary); }
+
+.log-empty {
+  color: var(--accent-success, #34d399);
+  padding: 12px 10px;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   24. Badge (Phase 3)
+   -------------------------------------------------------------------------- */
+.badge {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  margin-left: 4px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.badge-error {
+  background: var(--accent-error, #f87171);
+  color: white;
+}
+
+.badge-warning {
+  background: var(--accent-warning, #fbbf24);
+  color: #1a1a2e;
+}
+
+/* --------------------------------------------------------------------------
+   25. Compile Status Feedback (Phase 3)
+   -------------------------------------------------------------------------- */
+.status-text.success {
+  color: var(--accent-success, #34d399);
+}
+
+.status-text.error {
+  color: var(--accent-error, #f87171);
+}
+
+.btn-compiling {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* --------------------------------------------------------------------------
+   26. Zoom Toolbar (Phase 3)
+   -------------------------------------------------------------------------- */
+.zoom-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border-left: 1px solid var(--border-color);
+}
+
+.zoom-label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  min-width: 36px;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.btn-icon-only {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon-only:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
