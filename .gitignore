@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Project compilation artifacts
+projects/*/output/
+projects/*/*.aux
+projects/*/*.log
+projects/*/*.synctex.gz
+projects/*/*.fls
+projects/*/*.fdb_latexmk
+projects/*/*.bbl
+projects/*/*.blg
+projects/*/*.out
+projects/*/*.toc
+projects/*/*.lof
+projects/*/*.lot
+projects/*/_draft_wrapper.tex
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
