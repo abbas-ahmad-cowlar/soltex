@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SolteX -- LaTeX Editor</title>
+  <meta name="description" content="SolteX is a local-first, free, personal LaTeX editor with live PDF preview.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Top Toolbar -->
+  <header id="toolbar">
+    <div class="toolbar-left">
+      <a href="/dashboard.html" class="btn btn-toolbar" title="Back to Dashboard">
+        <span class="btn-icon">&#8592;</span>
+      </a>
+      <span id="project-name" class="toolbar-title">sample</span>
+    </div>
+    <div class="toolbar-center">
+      <button id="btn-compile" class="btn btn-primary">
+        <span class="btn-icon">&#9654;</span>
+        <span class="btn-text">Compile</span>
+      </button>
+      <button id="btn-draft" class="btn btn-toolbar" title="Draft mode: OFF (faster compilation)">
+        <span class="btn-icon">&#9889;</span>
+        <span class="btn-text">Draft</span>
+      </button>
+      <button id="btn-auto-compile" class="btn btn-toolbar" title="Auto-compile: OFF">
+        <span class="btn-icon">&#8634;</span>
+        <span class="btn-text">Auto</span>
+      </button>
+      <button id="btn-logs" class="btn btn-toolbar" title="Show compilation log">
+        <span class="btn-icon">&#128203;</span>
+        <span class="btn-text">Logs</span>
+        <span id="logs-badge" class="badge" style="display: none;"></span>
+      </button>
+      <button id="btn-clean" class="btn btn-toolbar" title="Recompile from scratch">
+        <span class="btn-icon">&#128260;</span>
+        <span class="btn-text">Clean</span>
+      </button>
+      <span id="compile-status" class="status-text"></span>
+    </div>
+    <div class="toolbar-right">
+      <div id="zoom-toolbar" class="zoom-toolbar">
+        <button id="btn-zoom-out" class="btn btn-icon-only" title="Zoom out (Ctrl+-)">&#8722;</button>
+        <span id="zoom-level" class="zoom-label">Fit</span>
+        <button id="btn-zoom-in" class="btn btn-icon-only" title="Zoom in (Ctrl++)">+</button>
+        <button id="btn-zoom-fit-width" class="btn btn-icon-only" title="Fit width (Ctrl+0)">&#8596;</button>
+        <button id="btn-zoom-fit-page" class="btn btn-icon-only" title="Fit page">&#8597;</button>
+      </div>
+      <button id="btn-detach" class="btn btn-toolbar" title="Open PDF in new tab">
+        <span class="btn-icon">&#8599;</span>
+      </button>
+      <button id="btn-save-checkpoint" class="btn btn-toolbar" title="Save Checkpoint (Ctrl+Shift+S)">
+        <span class="btn-icon">&#128190;</span>
+      </button>
+      <button id="btn-settings" class="btn btn-toolbar" title="Settings">
+        <span class="btn-icon">&#9881;</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="workspace">
+    <!-- File Sidebar (Phase 4) -->
+    <aside id="file-sidebar" class="file-sidebar">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" data-panel="files" title="Files">&#128193;</button>
+        <button class="sidebar-tab" data-panel="search" title="Search">&#128269;</button>
+        <button class="sidebar-tab" data-panel="outline" title="Outline">&#128209;</button>
+        <button class="sidebar-tab" data-panel="history" title="History">&#128336;</button>
+        <span style="flex:1"></span>
+        <button id="btn-toggle-sidebar" class="btn btn-icon-only btn-sm" title="Toggle sidebar">&#9776;</button>
+      </div>
+
+      <!-- Files panel -->
+      <div id="panel-files" class="sidebar-panel active">
+        <div class="file-toolbar">
+          <span class="file-toolbar-title">File tree</span>
+          <span style="flex:1"></span>
+          <button id="btn-new-file" class="btn btn-icon-only btn-xs" title="New File">&#128196;</button>
+          <button id="btn-new-folder" class="btn btn-icon-only btn-xs" title="New Folder">&#128193;</button>
+          <button id="btn-upload-files" class="btn btn-icon-only btn-xs" title="Upload Files">&#11014;</button>
+          <button id="btn-import-zip" class="btn btn-icon-only btn-xs" title="Import ZIP">&#128230;</button>
+          <button id="btn-open-explorer" class="btn btn-icon-only btn-xs" title="Open in Explorer">&#128194;</button>
+        </div>
+        <div id="file-tree" class="file-tree"></div>
+        <!-- Hidden file inputs -->
+        <input type="file" id="upload-files-input" multiple style="display:none">
+        <input type="file" id="upload-zip-input" accept=".zip" style="display:none">
+      </div>
+
+      <!-- Search panel -->
+      <div id="panel-search" class="sidebar-panel" style="display:none">
+        <div class="search-header">
+          <input id="search-input" class="search-input" type="text" placeholder="Search in project..." autocomplete="off">
+          <div class="search-options">
+            <label><input type="checkbox" id="search-case"> Aa</label>
+            <label><input type="checkbox" id="search-regex"> .*</label>
+          </div>
+        </div>
+        <div id="search-results" class="search-results">
+          <p class="search-empty">Type to search across all files</p>
+        </div>
+      </div>
+
+      <!-- Outline panel -->
+      <div id="panel-outline" class="sidebar-panel" style="display:none">
+        <div id="outline-tree" class="outline-tree"></div>
+      </div>
+
+      <!-- History panel (Phase 6) -->
+      <div id="panel-history" class="sidebar-panel" style="display:none">
+        <div id="checkpoint-list" class="checkpoint-list"></div>
+      </div>
+    </aside>
+
+    <!-- Editor Panel -->
+    <section id="editor-panel" class="panel panel-editor">
+      <!-- CodeMirror mounts here -->
+      <div id="editor-container"></div>
+
+      <!-- Log Panel (Phase 3) -->
+      <div id="log-panel" class="log-panel" style="display: none;">
+        <div class="log-header">
+          <span class="log-title">Compilation Log</span>
+          <button id="log-panel-close" class="btn btn-ghost btn-sm">x</button>
+        </div>
+        <div id="log-entries" class="log-entries">
+          <p class="log-empty">No errors or warnings</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resizable Divider -->
+    <div id="divider" class="divider">
+      <div class="divider-grip"></div>
+    </div>
+
+    <!-- Preview Panel -->
+    <section id="preview-panel" class="panel panel-preview">
+      <div id="pdf-container">
+        <div class="placeholder-state">
+          <svg class="placeholder-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <p class="placeholder-text">No PDF yet -- click Compile</p>
+          <p class="placeholder-hint">Edit your LaTeX in the left panel, then press <kbd>Ctrl+S</kbd> or click Compile</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Status Bar -->
+  <footer id="statusbar">
+    <div class="statusbar-left">
+      <span id="cursor-position">Ln 1, Col 1</span>
+      <span class="status-divider">|</span>
+      <span id="word-count">Words: —</span>
+    </div>
+    <div class="statusbar-right">
+      <span id="file-status">Ready</span>
+    </div>
+  </footer>
+
+  <!-- Context Menu (Phase 4) -->
+  <div id="context-menu" class="context-menu" style="display: none;">
+    <button class="ctx-item" data-action="new-file">New File</button>
+    <button class="ctx-item" data-action="new-folder">New Folder</button>
+    <hr class="ctx-divider">
+    <button class="ctx-item" data-action="rename">Rename</button>
+    <button class="ctx-item ctx-danger" data-action="delete">Delete</button>
+  </div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
