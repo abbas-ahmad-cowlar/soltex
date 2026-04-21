@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SolteX -- Projects</title>
+  <meta name="description" content="Your local LaTeX workspace. Manage and edit LaTeX projects.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="dashboard-body">
+  <header class="dashboard-header">
+    <div class="header-left">
+      <h1 class="logo">
+        <span class="logo-icon">&#127807;</span>
+        SolteX
+      </h1>
+      <span class="header-subtitle">Your LaTeX Workspace</span>
+    </div>
+    <div class="header-right">
+      <div class="view-toggle">
+        <button id="btn-grid-view" class="btn btn-icon-only active" title="Grid view">&#9638;</button>
+        <button id="btn-list-view" class="btn btn-icon-only" title="List view">&#9776;</button>
+      </div>
+      <button id="btn-new-project" class="btn btn-primary">
+        <span>+ New Project</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <div class="dashboard-toolbar">
+      <input id="search-projects" type="text" class="search-input" placeholder="Search projects..." autocomplete="off">
+      <label class="toggle-label">
+        <input type="checkbox" id="show-archived"> Show Archived
+      </label>
+    </div>
+
+    <div id="projects-container" class="projects-grid">
+      <p class="loading-text">Loading projects...</p>
+    </div>
+  </main>
+
+  <!-- New Project Modal (Phase 5: Template support) -->
+  <div id="new-project-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-box modal-wide">
+      <h2 class="modal-title">Create New Project</h2>
+
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-tab="blank">Blank Project</button>
+        <button class="modal-tab" data-tab="template">From Template</button>
+      </div>
+
+      <div id="tab-blank" class="modal-tab-content">
+        <label class="dialog-label" for="new-project-name">Project Name</label>
+        <input id="new-project-name" class="dialog-input" type="text" placeholder="e.g., My Thesis" autocomplete="off">
+      </div>
+
+      <div id="tab-template" class="modal-tab-content" style="display: none;">
+        <label class="dialog-label" for="template-project-name">Project Name</label>
+        <input id="template-project-name" class="dialog-input" type="text" placeholder="e.g., My Paper" autocomplete="off">
+        <div id="template-grid" class="template-grid">
+          <p class="search-empty">Loading templates...</p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="modal-cancel" class="btn btn-ghost">Cancel</button>
+        <button id="modal-create" class="btn btn-primary">Create</button>
+      </div>
+      <p id="modal-error" class="modal-error" style="display: none;"></p>
+    </div>
+  </div>
+
+  <script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>
