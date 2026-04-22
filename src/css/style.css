@@ -1063,3 +1063,78 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  transition: background var(--transition-fast);
+}
+
+.outline-entry:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.outline-major {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+}
+
+.outline-minor {
+  font-size: 11px;
+  color: var(--text-placeholder);
+}
+
+.outline-icon { font-size: 12px; flex-shrink: 0; }
+
+/* --------------------------------------------------------------------------
+   32. CodeMirror Search Bar Theme (Phase 5)
+   -------------------------------------------------------------------------- */
+.cm-search {
+  background: var(--bg-tertiary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.cm-search input, .cm-search select {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 3px !important;
+}
+
+.cm-search button {
+  background: var(--bg-secondary) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 3px !important;
+}
+
+.cm-search button:hover {
+  background: var(--bg-tertiary) !important;
+}
+
+.cm-search label { color: var(--text-secondary) !important; }
+.cm-searchMatch { background: rgba(255, 214, 0, 0.3) !important; }
+.cm-searchMatch-selected { background: rgba(255, 214, 0, 0.6) !important; }
+
+/* --------------------------------------------------------------------------
+   33. Spell Checker (Phase 5)
+   -------------------------------------------------------------------------- */
+.cm-misspelled {
+  text-decoration: underline wavy;
+  text-decoration-color: var(--accent-error, #f87171);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.spell-menu { min-width: 160px; }
+.spell-suggestion { font-weight: 600; color: var(--accent-primary) !important; }
+.ctx-disabled { color: var(--text-placeholder) !important; cursor: default; pointer-events: none; }
+
+/* --------------------------------------------------------------------------
+   34. Status Bar Divider (Phase 5)
+   -------------------------------------------------------------------------- */
+.status-divider { color: var(--border-color); margin: 0 4px; }
+
+/* --------------------------------------------------------------------------
