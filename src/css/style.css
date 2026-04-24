@@ -1061,3 +1061,232 @@ body {
 
 .outline-entry {
   display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  transition: background var(--transition-fast);
+}
+
+.outline-entry:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.outline-major {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+}
+
+.outline-minor {
+  font-size: 11px;
+  color: var(--text-placeholder);
+}
+
+.outline-icon { font-size: 12px; flex-shrink: 0; }
+
+/* --------------------------------------------------------------------------
+   32. CodeMirror Search Bar Theme (Phase 5)
+   -------------------------------------------------------------------------- */
+.cm-search {
+  background: var(--bg-tertiary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.cm-search input, .cm-search select {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 3px !important;
+}
+
+.cm-search button {
+  background: var(--bg-secondary) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 3px !important;
+}
+
+.cm-search button:hover {
+  background: var(--bg-tertiary) !important;
+}
+
+.cm-search label { color: var(--text-secondary) !important; }
+.cm-searchMatch { background: rgba(255, 214, 0, 0.3) !important; }
+.cm-searchMatch-selected { background: rgba(255, 214, 0, 0.6) !important; }
+
+/* --------------------------------------------------------------------------
+   33. Spell Checker (Phase 5)
+   -------------------------------------------------------------------------- */
+.cm-misspelled {
+  text-decoration: underline wavy;
+  text-decoration-color: var(--accent-error, #f87171);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.spell-menu { min-width: 160px; }
+.spell-suggestion { font-weight: 600; color: var(--accent-primary) !important; }
+.ctx-disabled { color: var(--text-placeholder) !important; cursor: default; pointer-events: none; }
+
+/* --------------------------------------------------------------------------
+   34. Status Bar Divider (Phase 5)
+   -------------------------------------------------------------------------- */
+.status-divider { color: var(--border-color); margin: 0 4px; }
+
+/* --------------------------------------------------------------------------
+   35. Checkpoint Panel (Phase 6)
+   -------------------------------------------------------------------------- */
+.checkpoint-list { overflow-y: auto; flex: 1; padding: 4px 0; }
+
+.checkpoint-entry {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background var(--transition-fast);
+}
+
+.checkpoint-entry:hover { background: var(--bg-tertiary); }
+
+.checkpoint-latest {
+  border-left: 3px solid var(--accent-primary);
+}
+
+.checkpoint-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.checkpoint-hash {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-primary);
+  background: rgba(124, 111, 247, 0.1);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.checkpoint-date {
+  font-size: 10px;
+  color: var(--text-placeholder);
+}
+
+.checkpoint-msg {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.checkpoint-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.checkpoint-current {
+  font-size: 10px;
+  color: var(--accent-success, #34d399);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.btn-xs {
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+/* --------------------------------------------------------------------------
+   36. Diff Viewer (Phase 6)
+   -------------------------------------------------------------------------- */
+.diff-content {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 12px;
+  max-height: 400px;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre;
+  margin-top: 12px;
+}
+
+.diff-add { color: #34d399; display: block; }
+.diff-del { color: #f87171; display: block; }
+.diff-ctx { color: var(--text-placeholder); display: block; }
+
+/* --------------------------------------------------------------------------
+   37. Settings Panel (Phase 6)
+   -------------------------------------------------------------------------- */
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.setting-label {
+  min-width: 160px;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.setting-select, .setting-input {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  font-size: var(--font-size-sm);
+  font-family: var(--font-main);
+  outline: none;
+}
+
+.setting-select:focus, .setting-input:focus { border-color: var(--accent-primary); }
+
+.setting-range {
+  flex: 1;
+  accent-color: var(--accent-primary);
+}
+
+/* --------------------------------------------------------------------------
+   38. Toast (Phase 6)
+   -------------------------------------------------------------------------- */
+.toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--bg-toolbar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-main);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  z-index: 300;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.toast-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
