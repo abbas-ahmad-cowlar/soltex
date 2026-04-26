@@ -96,16 +96,22 @@ async function start() {
   console.log('🌿 SolteX — LaTeX Editor Backend');
   console.log('─'.repeat(40));
 
-  // Check for LaTeX tools
+  // Bind the port FIRST so that we are ready to accept proxied requests
+  // from Vite (which starts faster). TeX tool checks are informational
+  // and don't gate any routes.
+  await new Promise((resolve) => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      resolve();
+    });
+  });
+
+  // Check for LaTeX tools (informational, non-blocking)
   await checkTexLive();
   await checkLatexmk();
 
   console.log('─'.repeat(40));
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log('');
-  });
+  console.log('');
 }
 
 start();
