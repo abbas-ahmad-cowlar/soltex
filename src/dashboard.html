@@ -12,30 +12,42 @@
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+
+  <!-- Prevent FOUC: apply stored theme before paint -->
+  <script>
+    (function(){var t=localStorage.getItem('soltex-app-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})();
+  </script>
 </head>
 <body class="dashboard-body">
   <header class="dashboard-header">
     <div class="header-left">
       <h1 class="logo">
-        <span class="logo-icon">&#127807;</span>
+        <i data-lucide="leaf" class="logo-icon"></i>
         SolteX
       </h1>
       <span class="header-subtitle">Your LaTeX Workspace</span>
     </div>
     <div class="header-right">
+      <button id="btn-theme-toggle" class="btn btn-icon-only" title="Toggle theme">
+        <i data-lucide="moon"></i>
+      </button>
       <div class="view-toggle">
-        <button id="btn-grid-view" class="btn btn-icon-only active" title="Grid view">&#9638;</button>
-        <button id="btn-list-view" class="btn btn-icon-only" title="List view">&#9776;</button>
+        <button id="btn-grid-view" class="btn btn-icon-only active" title="Grid view"><i data-lucide="layout-grid"></i></button>
+        <button id="btn-list-view" class="btn btn-icon-only" title="List view"><i data-lucide="list"></i></button>
       </div>
       <button id="btn-new-project" class="btn btn-primary">
-        <span>+ New Project</span>
+        <i data-lucide="plus" style="width:16px;height:16px;"></i>
+        <span>New Project</span>
       </button>
     </div>
   </header>
 
   <main class="dashboard-main">
     <div class="dashboard-toolbar">
-      <input id="search-projects" type="text" class="search-input" placeholder="Search projects..." autocomplete="off">
+      <div class="search-wrapper">
+        <i data-lucide="search" class="search-icon"></i>
+        <input id="search-projects" type="text" class="search-input" placeholder="Search projects..." autocomplete="off">
+      </div>
       <label class="toggle-label">
         <input type="checkbox" id="show-archived"> Show Archived
       </label>
@@ -77,6 +89,7 @@
     </div>
   </div>
 
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <script type="module" src="/js/dashboard.js"></script>
 </body>
 </html>

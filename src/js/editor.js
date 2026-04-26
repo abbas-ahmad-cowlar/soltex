@@ -172,7 +172,7 @@ export function initEditor(container, initialContent = '') {
         }
       }),
 
-      // Editor theme
+      // Editor base layout (theme-agnostic)
       EditorView.theme({
         '&': { height: '100%', fontSize: '14px' },
         '.cm-scroller': {
@@ -180,8 +180,8 @@ export function initEditor(container, initialContent = '') {
           fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace",
         },
         '.cm-content': { padding: '8px 0' },
-        '.cm-gutters': { backgroundColor: 'transparent', borderRight: '1px solid #3a3a5c' },
-        '.cm-foldGutter .cm-gutterElement': { padding: '0 4px', cursor: 'pointer', color: '#666680' },
+        '.cm-gutters': { backgroundColor: 'transparent', borderRight: '1px solid var(--border-color)' },
+        '.cm-foldGutter .cm-gutterElement': { padding: '0 4px', cursor: 'pointer', color: 'var(--text-placeholder)' },
       }),
     ],
   });

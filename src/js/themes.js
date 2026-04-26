@@ -53,6 +53,20 @@ const THEMES = {
       '.cm-activeLineGutter': { backgroundColor: '#161b2244' },
     }, { dark: true }),
   },
+  'soltex-light': {
+    name: 'SolteX Light',
+    extension: EditorView.theme({
+      '&': { backgroundColor: '#fafbfc' },
+      '.cm-content': { color: '#1c1f26', caretColor: '#0d9668' },
+      '.cm-cursor': { borderLeftColor: '#0d9668' },
+      '.cm-gutters': { backgroundColor: '#f5f6f8', color: '#98a1af', borderRight: '1px solid #dfe3e8' },
+      '.cm-activeLine': { backgroundColor: '#f0f1f3' },
+      '.cm-activeLineGutter': { backgroundColor: '#eef0f2', color: '#555d6b' },
+      '.cm-selectionMatch': { backgroundColor: 'rgba(13, 150, 104, 0.12)' },
+      '&.cm-focused .cm-selectionBackground, ::selection': { backgroundColor: 'rgba(13, 150, 104, 0.18)' },
+      '.cm-matchingBracket': { backgroundColor: 'rgba(13, 150, 104, 0.2)', outline: '1px solid rgba(13, 150, 104, 0.4)' },
+    }, { dark: false }),
+  },
 };
 
 let currentTheme = 'one-dark';
@@ -65,13 +79,24 @@ export function getCurrentTheme() {
   return currentTheme;
 }
 
-export function setEditorTheme(themeId, view) {
+/**
+ * Set the editor theme.
+ * @param {string} themeId
+ * @param {EditorView} view
+ * @param {boolean} [userExplicit=true] Whether the user explicitly chose this theme (vs auto-sync)
+ */
+export function setEditorTheme(themeId, view, userExplicit = true) {
   if (!THEMES[themeId] || !view) return;
   currentTheme = themeId;
   view.dispatch({
     effects: themeCompartment.reconfigure(THEMES[themeId].extension),
   });
-  localStorage.setItem('soltex-theme', themeId);
+  if (userExplicit) {
+    localStorage.setItem('soltex-theme', themeId);
+  } else {
+    // Auto-sync: remove explicit preference so it keeps following app theme
+    localStorage.removeItem('soltex-theme');
+  }
 }
 
 export function getInitialTheme() {
@@ -80,5 +105,13 @@ export function getInitialTheme() {
     currentTheme = stored;
     return THEMES[stored].extension;
   }
+  // Match the app theme if no explicit editor theme was chosen
+  const appTheme = localStorage.getItem('soltex-app-theme');
+  if (appTheme !== 'dark') {
+    currentTheme = 'soltex-light';
+    return THEMES['soltex-light'].extension;
+  }
+  currentTheme = 'one-dark';
   return THEMES['one-dark'].extension;
 }
+

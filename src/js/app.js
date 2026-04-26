@@ -14,6 +14,8 @@ import { initCheckpointPanel } from './checkpointPanel.js';
 import { initSettings, getSetting } from './settings.js';
 import { initAutoSave, markDirty, setAutoSavePath } from './autoSave.js';
 import { initShortcuts } from './shortcuts.js';
+import { initThemeToggle, onThemeToggle } from './themeToggle.js';
+import { setEditorTheme } from './themes.js';
 
 const params = new URLSearchParams(window.location.search);
 const projectSlug = params.get('project') || 'sample';
@@ -23,6 +25,19 @@ let mainFile = 'main.tex';
 console.log(`SolteX v0.7.0 -- Project: ${projectSlug}`);
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Theme & icons
+  initThemeToggle();
+  if (window.lucide) window.lucide.createIcons();
+
+  // Sync editor theme when app theme toggles
+  onThemeToggle((isDark) => {
+    const view = getEditorView();
+    if (view) {
+      // false = auto-sync, not explicit user choice
+      setEditorTheme(isDark ? 'one-dark' : 'soltex-light', view, false);
+    }
+  });
+
   const nameEl = document.getElementById('project-name');
   if (nameEl) nameEl.textContent = projectSlug;
 

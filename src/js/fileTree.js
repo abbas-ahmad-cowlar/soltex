@@ -63,6 +63,8 @@ export function setActiveFile(filePath) {
 function renderTree(items) {
   treeContainer.innerHTML = '';
   treeContainer.appendChild(createTreeLevel(items, 0));
+  // Hydrate Lucide icons after rendering
+  if (window.lucide) window.lucide.createIcons();
 }
 
 function createTreeLevel(items, depth) {
@@ -82,20 +84,27 @@ function createTreeLevel(items, depth) {
     if (item.type === 'folder') {
       const arrow = document.createElement('span');
       arrow.className = 'tree-arrow';
-      arrow.textContent = String.fromCharCode(9662); // down triangle
+      arrow.innerHTML = '<i data-lucide="chevron-down" style="width:12px;height:12px;"></i>';
       row.appendChild(arrow);
 
       row.addEventListener('click', () => {
         li.classList.toggle('collapsed');
-        arrow.textContent = li.classList.contains('collapsed')
-          ? String.fromCharCode(9656) // right
-          : String.fromCharCode(9662); // down
+        const arrowIcon = arrow.querySelector('[data-lucide]');
+        if (arrowIcon) {
+          arrowIcon.setAttribute('data-lucide', li.classList.contains('collapsed') ? 'chevron-right' : 'chevron-down');
+          if (window.lucide) window.lucide.createIcons();
+        }
       });
     }
 
     const icon = document.createElement('span');
     icon.className = 'tree-icon';
-    icon.textContent = item.type === 'folder' ? String.fromCharCode(128193) : getFileIcon(item.name);
+    if (item.type === 'folder') {
+      icon.innerHTML = '<i data-lucide="folder" style="width:14px;height:14px;"></i>';
+    } else {
+      const iconName = getFileIcon(item.name);
+      icon.innerHTML = `<i data-lucide="${iconName}" style="width:14px;height:14px;"></i>`;
+    }
     row.appendChild(icon);
 
     const name = document.createElement('span');
@@ -138,17 +147,19 @@ function selectFile(filePath, rowEl) {
 function getFileIcon(filename) {
   const ext = filename.split('.').pop().toLowerCase();
   const map = {
-    tex: String.fromCodePoint(128221), // memo
-    bib: String.fromCodePoint(128218), // books
-    sty: String.fromCodePoint(127912), // palette
-    cls: String.fromCodePoint(128203), // clipboard
-    png: String.fromCodePoint(128444), // frame
-    jpg: String.fromCodePoint(128444),
-    pdf: String.fromCodePoint(128213), // book
-    txt: String.fromCodePoint(128196), // page
-    md: String.fromCodePoint(128221),
+    tex: 'file-text',
+    bib: 'book-open',
+    sty: 'file-cog',
+    cls: 'file-cog',
+    png: 'image',
+    jpg: 'image',
+    jpeg: 'image',
+    pdf: 'file-text',
+    txt: 'file',
+    md: 'file-text',
+    log: 'scroll-text',
   };
-  return map[ext] || String.fromCodePoint(128196);
+  return map[ext] || 'file';
 }
 
 // -- Context Menu --

@@ -1,6 +1,8 @@
 // src/js/dashboard.js
 // SolteX -- Dashboard Page Logic (Phase 5)
 
+import { initThemeToggle } from './themeToggle.js';
+
 let allProjects = [];
 let viewMode = 'grid';
 let showArchived = false;
@@ -8,6 +10,10 @@ let selectedTemplate = null;
 let activeTab = 'blank';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  initThemeToggle();
+  // Initialize Lucide icons for static elements
+  if (window.lucide) window.lucide.createIcons();
+
   await loadProjects();
   await loadTemplates();
 
@@ -74,6 +80,7 @@ async function loadTemplates() {
     }
     grid.innerHTML = data.templates.map(t => `
       <div class="template-card" data-slug="${t.slug}">
+
         <span class="template-icon">${t.icon}</span>
         <h4 class="template-name">${esc(t.name)}</h4>
         <p class="template-desc">${esc(t.description)}</p>
@@ -112,6 +119,8 @@ function renderProjects() {
 
   container.className = viewMode === 'grid' ? 'projects-grid' : 'projects-list';
   container.innerHTML = filtered.map(projectCard).join('');
+  // Hydrate Lucide icons in rendered cards
+  if (window.lucide) window.lucide.createIcons();
 
   container.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('click', (e) => {
@@ -154,18 +163,19 @@ function projectCard(project) {
     `<span class="tag tag-${t.toLowerCase()}">${esc(t)}</span>`
   ).join('');
   const archiveLabel = project.archived ? 'Unarchive' : 'Archive';
+  const archiveIcon = project.archived ? 'archive-restore' : 'archive';
 
   return `
     <div class="project-card" data-slug="${project.slug}">
-      <div class="card-icon">&#128196;</div>
-      <div class="card-body">
+      <div class="card-header">
+        <i data-lucide="file-text" class="card-icon"></i>
         <h3 class="card-title">${esc(project.name)}</h3>
-        <p class="card-date">Modified ${date}</p>
-        <div class="card-tags">${tags}</div>
       </div>
+      <p class="card-date">Modified ${date}</p>
+      <div class="card-tags">${tags}</div>
       <div class="card-actions">
-        <button class="btn btn-ghost btn-sm" data-action="archive" title="${archiveLabel}">${project.archived ? '&#128194;' : '&#128451;'}</button>
-        <button class="btn btn-ghost btn-sm card-delete" data-action="delete" title="Delete">&#128465;</button>
+        <button class="btn btn-ghost btn-sm" data-action="archive" title="${archiveLabel}"><i data-lucide="${archiveIcon}" style="width:14px;height:14px;"></i></button>
+        <button class="btn btn-ghost btn-sm card-delete" data-action="delete" title="Delete"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
       </div>
       ${project.archived ? '<span class="card-badge">Archived</span>' : ''}
     </div>
