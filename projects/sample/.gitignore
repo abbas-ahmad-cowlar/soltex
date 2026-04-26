@@ -1,0 +1,13 @@
+output/
+*.aux
+*.log
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.out
+*.toc
+*.lof
+*.lot
+_draft_wrapper.tex
