@@ -1,8 +1,8 @@
 // src/js/app.js
-// SolteX -- Frontend Entry Point (Phase 7 -- Final)
+// SolteX -- Frontend Entry Point (Fixed: save/compile separation)
 
 import { initEditor, getContent, setContent, getEditorView, toggleWordWrap, setKeybindingMode, goToLine } from './editor.js';
-import { initCompiler, runCompile, recompileClean, toggleDraftMode } from './compiler.js';
+import { initCompiler, runCompile, recompileClean, toggleDraftMode, setCurrentFilePathGetter } from './compiler.js';
 import { initPdfViewer } from './pdfViewer.js';
 import { initSplitPanel } from './splitPanel.js';
 import { initAutoCompile } from './autoCompile.js';
@@ -12,7 +12,7 @@ import { initSearchPanel } from './searchPanel.js';
 import { initOutline } from './outlinePanel.js';
 import { initCheckpointPanel } from './checkpointPanel.js';
 import { initSettings, getSetting } from './settings.js';
-import { initAutoSave, markDirty, setAutoSavePath } from './autoSave.js';
+import { initAutoSave, markDirty, setAutoSavePath, saveCurrentFile, toggleAutoSave } from './autoSave.js';
 import { initShortcuts } from './shortcuts.js';
 import { initThemeToggle, onThemeToggle } from './themeToggle.js';
 import { setEditorTheme } from './themes.js';
@@ -22,7 +22,14 @@ const projectSlug = params.get('project') || 'sample';
 let currentFilePath = null;
 let mainFile = 'main.tex';
 
-console.log(`SolteX v0.7.0 -- Project: ${projectSlug}`);
+/**
+ * Get the current file path (used by compiler.js to save to the correct file).
+ */
+export function getCurrentFilePath() {
+  return currentFilePath;
+}
+
+console.log(`SolteX v0.7.1 -- Project: ${projectSlug}`);
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Theme & icons
@@ -69,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       getContent, setContent, editor,
       toggleWordWrap, setKeybindingMode, goToLine,
       runCompile, recompileClean, toggleDraftMode,
-      refreshTree, markDirty,
+      refreshTree, markDirty, saveCurrentFile,
     };
   } catch (err) {
     console.error('Editor init error:', err);
@@ -77,6 +84,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     editorContainer.innerHTML = `<div style="padding:40px;color:var(--text-placeholder);text-align:center">
       <p>Failed to load file</p><p style="font-size:12px">${err.message}</p></div>`;
   }
+
+  // Tell compiler.js how to get the current file path (avoids circular import)
+  setCurrentFilePathGetter(() => currentFilePath);
 
   // File tree
   await initFileTree(projectSlug, (filePath) => openFile(filePath));
@@ -103,6 +113,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Keyboard shortcuts (Phase 7)
   initShortcuts();
 
+  // ── Keyboard Shortcuts: Save & Compile ──────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    // Ctrl+S = Save current file only (no compile)
+    if ((e.ctrlKey || e.metaKey) && e.key === 's' && !e.shiftKey) {
+      e.preventDefault();
+      saveCurrentFile();
+    }
+    // Ctrl+Enter = Save current file + compile main.tex
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      runCompile();
+    }
+  });
+
+  // Auto-save toggle button
+  const btnAutoSave = document.getElementById('btn-auto-save');
+  if (btnAutoSave) btnAutoSave.addEventListener('click', toggleAutoSave);
+
   // Sidebar tab switching
   initSidebarTabs();
 
@@ -128,11 +156,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  console.log('SolteX: All modules loaded (Phase 7)');
+  console.log('SolteX: All modules loaded (save/compile fix applied)');
 });
 
-// -- Open file in editor --
+// -- Open file in editor (saves current file first!) --
 async function openFile(filePath, lineNum) {
+  // Save the current file before switching
+  if (currentFilePath) {
+    await saveCurrentFile();
+  }
+
   const fullPath = `projects/${projectSlug}/${filePath}`;
   const fileStatus = document.getElementById('file-status');
   try {

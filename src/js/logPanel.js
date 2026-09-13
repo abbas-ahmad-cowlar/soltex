@@ -7,6 +7,7 @@ import { goToLine } from './editor.js';
 let panelEl = null;
 let listEl = null;
 let isOpen = false;
+let rawLogText = '';
 
 /**
  * Initialize the log panel.
@@ -28,6 +29,10 @@ export function initLogPanel() {
   const btnClose = document.getElementById('log-panel-close');
   if (btnClose) btnClose.addEventListener('click', () => { if (isOpen) togglePanel(); });
 
+  // Copy logs button
+  const btnCopy = document.getElementById('log-panel-copy');
+  if (btnCopy) btnCopy.addEventListener('click', copyLogsToClipboard);
+
   // Listen for compile events
   document.addEventListener('compile-success', (e) => {
     updateFromLog(e.detail.log || '');
@@ -41,10 +46,30 @@ export function initLogPanel() {
 }
 
 function updateFromLog(logText) {
+  rawLogText = logText;
   const entries = parseLatexLog(logText);
   const counts = countEntries(entries);
   updateBadge(counts);
   renderEntries(entries);
+}
+
+async function copyLogsToClipboard() {
+  if (!rawLogText) return;
+  try {
+    await navigator.clipboard.writeText(rawLogText);
+    const btn = document.getElementById('log-panel-copy');
+    if (btn) {
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copy-success');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copy-success');
+      }, 1500);
+    }
+  } catch (err) {
+    console.warn('Copy failed:', err);
+  }
 }
 
 function renderEntries(entries) {

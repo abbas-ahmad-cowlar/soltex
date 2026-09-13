@@ -30,7 +30,7 @@ Most LaTeX editors are either cloud-locked (Overleaf), bloated (TeXstudio), or t
 - **Autocomplete** for 200+ LaTeX commands and environments
 - **Bracket matching**, code folding, and go-to-line
 - **Vim and Emacs** keybinding modes
-- **5 dark themes** (One Dark, Dracula, Nord, Monokai, Solarized)
+- **6 editor themes** (One Dark, Monokai, Dracula, Solarized Dark, GitHub Dark, SolteX Light)
 - **Find & Replace** with regex support (Ctrl+H)
 
 ### Compilation

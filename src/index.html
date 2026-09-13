@@ -9,7 +9,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/style.css">
 
@@ -109,8 +109,14 @@
         <div class="search-header">
           <input id="search-input" class="search-input" type="text" placeholder="Search in project..." autocomplete="off">
           <div class="search-options">
-            <label><input type="checkbox" id="search-case"> Aa</label>
-            <label><input type="checkbox" id="search-regex"> .*</label>
+            <label class="toggle-chip" for="search-case">
+              <input type="checkbox" id="search-case" class="sr-only">
+              <span class="chip-label">Aa</span>
+            </label>
+            <label class="toggle-chip" for="search-regex">
+              <input type="checkbox" id="search-regex" class="sr-only">
+              <span class="chip-label">.*</span>
+            </label>
           </div>
         </div>
         <div id="search-results" class="search-results">
@@ -138,9 +144,15 @@
       <div id="log-panel" class="log-panel" style="display: none;">
         <div class="log-header">
           <span class="log-title">Compilation Log</span>
-          <button id="log-panel-close" class="btn btn-ghost btn-sm">
-            <i data-lucide="x" style="width:14px;height:14px;"></i>
-          </button>
+          <div class="log-header-actions">
+            <button id="log-panel-copy" class="btn btn-ghost btn-sm" title="Copy full log to clipboard">
+              <i data-lucide="copy" style="width:13px;height:13px;"></i>
+              <span>Copy</span>
+            </button>
+            <button id="log-panel-close" class="btn btn-ghost btn-sm">
+              <i data-lucide="x" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
         </div>
         <div id="log-entries" class="log-entries">
           <p class="log-empty">No errors or warnings</p>
@@ -162,7 +174,7 @@
             <polyline points="14 2 14 8 20 8"></polyline>
           </svg>
           <p class="placeholder-text">No PDF yet -- click Compile</p>
-          <p class="placeholder-hint">Edit your LaTeX in the left panel, then press <kbd>Ctrl+S</kbd> or click Compile</p>
+          <p class="placeholder-hint">Edit your LaTeX in the left panel, then press <kbd>Ctrl+Enter</kbd> or click Compile</p>
         </div>
       </div>
     </section>
@@ -176,6 +188,10 @@
       <span id="word-count">Words: —</span>
     </div>
     <div class="statusbar-right">
+      <button id="btn-auto-save" class="btn btn-statusbar btn-active" title="Auto-save: ON">
+        <span class="btn-text">Auto-save: ON</span>
+      </button>
+      <span class="status-divider">|</span>
       <span id="file-status">Ready</span>
     </div>
   </footer>

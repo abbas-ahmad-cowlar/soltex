@@ -6,7 +6,7 @@ export default defineConfig({
   publicDir: '../public', // Static assets (if any)
   server: {
     port: 3000,
-    open: true,           // Auto-open browser on start
+    open: false,          // Launcher handles browser opening after both servers are ready
     proxy: {
       // Proxy API calls to the Express backend
       '/api': {

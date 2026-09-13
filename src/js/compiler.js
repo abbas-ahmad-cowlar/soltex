@@ -1,5 +1,5 @@
 // src/js/compiler.js
-// SolteX -- Compile Button Logic (Phase 3: Enhanced)
+// SolteX -- Compile Logic (Fixed: save/compile separation)
 
 import { getContent } from './editor.js';
 
@@ -12,6 +12,9 @@ const projectSlug = params.get('project') || 'sample';
 const PROJECT_PATH = `projects/${projectSlug}`;
 let MAIN_FILE = 'main.tex';
 
+// Callback to get the current file path — set by app.js
+let getCurrentFilePathFn = null;
+
 /**
  * Set the main file for compilation (called from app.js).
  */
@@ -20,7 +23,16 @@ export function setMainFile(file) {
 }
 
 /**
- * Initialize the compile button and keyboard shortcuts.
+ * Register a callback that returns the current file path.
+ * This avoids a circular import between app.js and compiler.js.
+ */
+export function setCurrentFilePathGetter(fn) {
+  getCurrentFilePathFn = fn;
+}
+
+/**
+ * Initialize the compile button.
+ * NOTE: Keyboard shortcuts (Ctrl+S, Ctrl+Enter) are now handled by app.js.
  */
 export function initCompiler() {
   const btnCompile = document.getElementById('btn-compile');
@@ -29,18 +41,6 @@ export function initCompiler() {
   // Draft toggle
   const btnDraft = document.getElementById('btn-draft');
   if (btnDraft) btnDraft.addEventListener('click', toggleDraftMode);
-
-  // Keyboard shortcuts
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault();
-      runCompile();
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-      runCompile();
-    }
-  });
 
   console.log('SolteX: Compiler initialized');
 }
@@ -60,7 +60,8 @@ export function toggleDraftMode() {
 }
 
 /**
- * Run the full save -> compile -> refresh pipeline.
+ * Save the current file to its CORRECT path, then compile main.tex.
+ * This is the fixed pipeline: save current → compile main.
  */
 export async function runCompile() {
   if (isCompiling) return;
@@ -83,18 +84,19 @@ export async function runCompile() {
     if (compileStatus) { compileStatus.textContent = ''; compileStatus.className = 'status-text'; }
     if (fileStatus) fileStatus.textContent = 'Saving...';
 
-    // Step 1: Save
+    // Step 1: Save the CURRENT file to its correct path (not main.tex)
     const content = getContent();
+    const currentPath = getCurrentFilePathFn ? getCurrentFilePathFn() : `${PROJECT_PATH}/${MAIN_FILE}`;
     const saveRes = await fetch('/api/file', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path: `${PROJECT_PATH}/${MAIN_FILE}`, content }),
+      body: JSON.stringify({ path: currentPath, content }),
     });
     if (!saveRes.ok) throw new Error('Failed to save file');
 
     if (fileStatus) fileStatus.textContent = 'Compiling...';
 
-    // Step 2: Compile
+    // Step 2: Compile main.tex (always, regardless of which file is open)
     const compileRes = await fetch('/api/compile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -115,14 +117,24 @@ export async function runCompile() {
         detail: { pdfUrl: result.pdfUrl, duration: result.duration, log: result.log },
       }));
     } else {
-      if (compileStatus) {
-        compileStatus.textContent = 'Compilation failed';
-        compileStatus.className = 'status-text error';
+      // PDF may still have been produced despite errors (nonstopmode behavior)
+      if (result.pdfUrl) {
+        // Compiled with warnings — still have a PDF
+        if (compileStatus) {
+          compileStatus.textContent = 'Compiled with warnings';
+          compileStatus.className = 'status-text warning';
+        }
+        if (fileStatus) fileStatus.textContent = 'Ready';
+      } else {
+        if (compileStatus) {
+          compileStatus.textContent = 'Compilation failed';
+          compileStatus.className = 'status-text error';
+        }
+        if (fileStatus) fileStatus.textContent = 'Error';
       }
-      if (fileStatus) fileStatus.textContent = 'Error';
 
       document.dispatchEvent(new CustomEvent('compile-error', {
-        detail: { log: result.log, duration: result.duration },
+        detail: { log: result.log, duration: result.duration, pdfUrl: result.pdfUrl },
       }));
     }
   } catch (err) {

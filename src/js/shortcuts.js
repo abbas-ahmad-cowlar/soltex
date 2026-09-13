@@ -18,7 +18,8 @@ export function registerShortcut(keys, description, handler) {
  */
 export function initShortcuts() {
   // Register built-in shortcuts
-  registerShortcut('Ctrl+S', 'Save file', null);
+  registerShortcut('Ctrl+S', 'Save current file', null);
+  registerShortcut('Ctrl+Enter', 'Compile project (main.tex)', null);
   registerShortcut('Ctrl+F', 'Find in file', null);
   registerShortcut('Ctrl+H', 'Find & Replace', null);
   registerShortcut('Ctrl+Shift+F', 'Search in project', null);

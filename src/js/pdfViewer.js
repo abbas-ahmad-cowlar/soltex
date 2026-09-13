@@ -29,8 +29,14 @@ export function initPdfViewer() {
     }
   });
 
-  document.addEventListener('compile-error', () => {
-    // Keep current PDF visible
+  document.addEventListener('compile-error', (e) => {
+    // Still load the PDF if one was produced despite errors (Overleaf behavior)
+    const { pdfUrl } = e.detail || {};
+    if (pdfUrl) {
+      lastPdfUrl = pdfUrl;
+      loadPDF(`${pdfUrl}?t=${Date.now()}`);
+    }
+    // Otherwise keep current PDF visible
   });
 
   // Zoom buttons

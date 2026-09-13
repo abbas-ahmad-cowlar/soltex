@@ -37,14 +37,30 @@ export async function compileLaTeX(projectDir, mainFile, options = {}) {
     await fs.writeFile(wrapperPath, wrapperContent, 'utf-8');
     compileFile = '_draft_wrapper.tex';
   }
+  // Copy .bib and .bst files into output dir so bibtex can find them
+  // (bibtex runs from outdir and MiKTeX ignores BIBINPUTS)
+  const copiedFiles = [];
+  try {
+    const entries = await fs.readdir(projectDir);
+    for (const entry of entries) {
+      if (entry.endsWith('.bib') || entry.endsWith('.bst')) {
+        const src = path.join(projectDir, entry);
+        const dst = path.join(outputDir, entry);
+        await fs.copyFile(src, dst);
+        copiedFiles.push(dst);
+      }
+    }
+  } catch (e) {
+    console.warn('Could not copy bib/bst files:', e.message);
+  }
 
   return new Promise((resolve) => {
     const args = [
       '-pdf',
-      `-pdflatex=${selectedEngine}`,
+      `-pdflatex=${selectedEngine} -interaction=nonstopmode -file-line-error`,
+      '-f',                        // Force: continue past errors, still produce PDF
       '-interaction=nonstopmode',
       '-synctex=1',
-      '-halt-on-error',
       `-outdir=${outputDir}`,
       compileFile,
     ];

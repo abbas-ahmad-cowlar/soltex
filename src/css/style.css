@@ -7,7 +7,7 @@
    -------------------------------------------------------------------------- */
 :root {
   /* Colors — Light Theme (default) */
-  --bg-primary: #f5f6f8;
+  --bg-primary: #f0f2f5;
   --bg-secondary: #ffffff;
   --bg-tertiary: #eef0f4;
   --bg-toolbar: #ffffff;
@@ -15,7 +15,7 @@
   --bg-divider-hover: var(--accent-primary);
 
   /* Warm page gradient for character */
-  --bg-page: linear-gradient(135deg, #f5f6f8 0%, #eef1f5 40%, #f0ece8 100%);
+  --bg-page: linear-gradient(135deg, #f0f2f5 0%, #eaecf3 40%, #ede9e5 100%);
 
   --text-primary: #1c1f26;
   --text-secondary: #555d6b;
@@ -25,13 +25,19 @@
   --accent-primary-hover: #087a54;
   --accent-primary-glow: rgba(13, 150, 104, 0.14);
   --accent-secondary: #0ea5e9;         /* Sky blue for secondary accents */
+  --accent-gradient: linear-gradient(135deg, #0d9668, #0a8f72, #0ea5e9);
   --accent-success: #16a34a;
   --accent-error: #dc2626;
   --accent-warning: #d97706;
 
-  --border-color: #dfe3e8;
+  --border-color: rgba(0, 0, 0, 0.06);
   --border-radius: 10px;
   --border-radius-sm: 6px;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-blur: blur(8px);
+  --glass-border: rgba(255, 255, 255, 0.5);
 
   /* Spacing */
   --toolbar-height: 48px;
@@ -40,6 +46,7 @@
   --sidebar-width: 0px;
 
   /* Typography */
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   --font-ui: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-main: var(--font-ui);
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
@@ -49,15 +56,17 @@
   --font-size-lg: 14.5px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
   --shadow-glow: 0 0 20px var(--accent-primary-glow);
 
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 400ms ease;
+  --transition-bounce: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* --------------------------------------------------------------------------
@@ -81,14 +90,19 @@
   --accent-primary-hover: #10b981;
   --accent-primary-glow: rgba(52, 211, 153, 0.16);
   --accent-secondary: #38bdf8;
+  --accent-gradient: linear-gradient(135deg, #34d399, #10b981, #38bdf8);
   --accent-success: #4ade80;
   --accent-error: #f87171;
   --accent-warning: #fbbf24;
 
-  --border-color: #282a40;
+  --border-color: rgba(255, 255, 255, 0.06);
+  --glass-bg: rgba(17, 18, 32, 0.78);
+  --glass-blur: blur(8px);
+  --glass-border: rgba(255, 255, 255, 0.08);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* --------------------------------------------------------------------------
@@ -124,8 +138,10 @@ body {
    -------------------------------------------------------------------------- */
 #toolbar {
   height: var(--toolbar-height);
-  background: var(--bg-toolbar);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
@@ -145,7 +161,7 @@ body {
   right: 0;
   height: 2px;
   background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary, var(--accent-primary)), transparent);
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .toolbar-left {
@@ -162,10 +178,11 @@ body {
 }
 
 .toolbar-title {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: var(--font-size-lg);
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .toolbar-center {
@@ -282,6 +299,35 @@ body {
   gap: 16px;
 }
 
+.btn-statusbar {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  line-height: 1.3;
+}
+
+.btn-statusbar:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.btn-statusbar.btn-active {
+  background: var(--accent-primary-glow);
+  color: var(--accent-primary);
+}
+
+.status-divider {
+  color: var(--border-color);
+  font-size: 10px;
+  user-select: none;
+}
+
 #cursor-position {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
@@ -308,20 +354,23 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  background: var(--accent-gradient);
   color: white;
-  box-shadow: 0 2px 8px var(--accent-primary-glow);
+  box-shadow: 0 2px 12px var(--accent-primary-glow);
   font-weight: 600;
+  background-size: 150% 150%;
+  background-position: 0% 50%;
 }
 
 .btn-primary:hover {
   filter: brightness(1.1);
-  box-shadow: 0 4px 20px var(--accent-primary-glow), var(--shadow-glow);
+  box-shadow: 0 4px 24px var(--accent-primary-glow), var(--shadow-glow);
   transform: translateY(-1px);
+  background-position: 100% 50%;
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
   filter: brightness(0.95);
 }
 
@@ -376,8 +425,9 @@ body {
 
 .placeholder-text {
   color: var(--text-placeholder);
+  font-family: var(--font-display);
   font-size: var(--font-size-lg);
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
 }
 
@@ -418,13 +468,13 @@ body {
    14. Scrollbar Styling (Webkit)
    -------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--bg-divider);
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -595,7 +645,7 @@ body {
    -------------------------------------------------------------------------- */
 .btn-toolbar {
   background: transparent;
-  border: 1px solid var(--border-color);
+  border: 1px solid transparent;
   color: var(--text-secondary);
   padding: 5px 12px;
   font-size: var(--font-size-sm);
@@ -610,7 +660,6 @@ body {
 .btn-toolbar:hover {
   background: var(--bg-tertiary);
   color: var(--text-primary);
-  border-color: var(--text-placeholder);
 }
 
 .btn-active {
@@ -682,6 +731,16 @@ body {
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 600;
+}
+
+.log-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.copy-success {
+  color: var(--accent-success) !important;
 }
 
 .log-entries {
@@ -774,6 +833,10 @@ body {
   color: var(--accent-error, #f87171);
 }
 
+.status-text.warning {
+  color: var(--accent-warning, #fbbf24);
+}
+
 .btn-compiling {
   opacity: 0.7;
   cursor: wait;
@@ -820,7 +883,7 @@ body {
    -------------------------------------------------------------------------- */
 .file-sidebar {
   background: var(--bg-secondary);
-  border-right: 1px solid var(--border-color);
+  box-shadow: 1px 0 8px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -833,7 +896,7 @@ body {
 .file-sidebar.collapsed {
   width: 0 !important;
   min-width: 0;
-  border-right: none;
+  box-shadow: none;
   overflow: hidden;
 }
 
@@ -951,10 +1014,11 @@ body {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-lg);
   padding: 4px 0;
   z-index: 300;
   min-width: 180px;
+  animation: menuSlideIn 150ms ease;
 }
 
 .ctx-item {
@@ -995,7 +1059,7 @@ body {
 .sidebar-tabs {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   background: var(--bg-toolbar);
   flex-shrink: 0;
   gap: 2px;
@@ -1044,7 +1108,7 @@ body {
 .search-header .search-input {
   width: 100%;
   box-sizing: border-box;
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   color: var(--text-primary);
@@ -1052,9 +1116,14 @@ body {
   font-size: var(--font-size-sm);
   font-family: var(--font-main);
   outline: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.search-header .search-input:focus { border-color: var(--accent-primary); }
+.search-header .search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary-glow);
+}
 
 .search-options {
   display: flex;
@@ -1514,4 +1583,112 @@ body {
 .file-toolbar .btn-icon-only:hover {
   color: var(--text-primary);
   background: var(--bg-tertiary);
+}
+
+/* --------------------------------------------------------------------------
+   43. Animation Keyframes (UI Overhaul)
+   -------------------------------------------------------------------------- */
+@keyframes menuSlideIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   44. Toggle Chips — Pill-shaped toggle buttons (Search Aa/.*)
+   -------------------------------------------------------------------------- */
+.toggle-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.toggle-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--text-placeholder);
+}
+
+.toggle-chip:has(.sr-only:checked) {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+  box-shadow: 0 2px 8px var(--accent-primary-glow);
+}
+
+/* --------------------------------------------------------------------------
+   45. Toggle Switch — iOS-style (Show Archived)
+   -------------------------------------------------------------------------- */
+.toggle-switch-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: var(--bg-divider);
+  border-radius: 12px;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform var(--transition-bounce);
+}
+
+.toggle-switch-label:has(.sr-only:checked) .toggle-track {
+  background: var(--accent-primary);
+}
+
+.toggle-switch-label:has(.sr-only:checked) .toggle-thumb {
+  transform: translateX(16px);
+}
+
+/* --------------------------------------------------------------------------
+   46. Accessible Hidden Input
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
